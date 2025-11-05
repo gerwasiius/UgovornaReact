@@ -15,14 +15,14 @@ function Templates() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppLayout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/placeholders" element={<Placeholder />} />
-          <Route path="/placeholders2" element={<Placeholder2 />} />
-          <Route path="/templates" element={<Templates />} />
-        </Routes>
-      </AppLayout>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<Home />} />
+          <Route path="placeholders" element={<Placeholder />} />
+          <Route path="placeholders2" element={<Placeholder2 />} />
+          <Route path="templates" element={<Templates />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

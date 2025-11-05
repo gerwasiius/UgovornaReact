@@ -29,7 +29,7 @@ export default function CardLink({
       <div
         className="
 flex flex-col justify-stretch min-h-[200px] w-full cursor-pointer
-rounded-lg bg-white border-[1.5px] border-slate-200
+rounded-lg bg-white border shadow-sm border-slate-200
 transition-[box-shadow,border-color,ring] duration-200
 hover:ring-2 hover:ring-yellow-400 hover:shadow-(--shadow-card)
 "
