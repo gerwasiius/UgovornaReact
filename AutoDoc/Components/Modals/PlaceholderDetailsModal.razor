@@ -1,0 +1,75 @@
+﻿@using AutoDocFront.Components.Shared
+@using AutoDocFront.Components.Shared.Inputs
+@using AutoDocFront.Utilities
+@inherits ModalBase
+
+<BaseModalLayout IsOpen="@IsOpen"
+                 Title="Detalji placeholdera"
+                 IsOpenChanged="@IsOpenChanged">
+    <BodyContent>
+        @if (Placeholder == null)
+        {
+            <div class="text-center text-secondary py-4">Nema podataka za prikaz.</div>
+        }
+        else
+        {
+
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-4 d-flex align-items-center fw-semibold">Vrijednost</div>
+                    <div class="col-sm-8">
+                        <ReadOnlyInputText Value="@($"{Placeholder.Group}.{Placeholder.Name}")" />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4 d-flex align-items-center fw-semibold">Grupa</div>
+                    <div class="col-sm-8">
+                        <ReadOnlyInputText Value="@Placeholder.Group" />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4 d-flex align-items-center fw-semibold">Naziv</div>
+                    <div class="col-sm-8">
+                        <ReadOnlyInputText Value="@Placeholder.Name" />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4 d-flex align-items-center fw-semibold">Opis</div>
+                    <div class="col-sm-8">
+                        <ReadOnlyInputText Value="@(string.IsNullOrWhiteSpace(Placeholder.Description) ? "Nema opisa" : Placeholder.Description)" IsTextArea="true" Rows="2" />
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4 d-flex align-items-center fw-semibold">Tip podatka</div>
+                    <div class="col-sm-8">
+                        <span class="badge @PlaceholderHelpers.GetTypeBadgeClass(Placeholder.Type.ToString())">@Placeholder.Type</span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4 d-flex align-items-center fw-semibold">Moguće vrijednosti</div>
+                    <div class="col-sm-8">
+                        @if (Placeholder.EnumValues != null && Placeholder.EnumValues.Any())
+                        {
+                            <div class="d-flex flex-wrap gap-1">
+                                @foreach (var value in Placeholder.EnumValues)
+                                {
+                                    <span class="badge bg-light text-dark me-2">@value</span>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="text-muted fst-italic">-</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        }
+    </BodyContent>
+    <FooterContent>
+        <div class="modal-footer d-flex justify-content-end">
+            <button class="btn btn-secondary" @onclick="Close">Zatvori</button>
+        </div>
+    </FooterContent>
+</BaseModalLayout>

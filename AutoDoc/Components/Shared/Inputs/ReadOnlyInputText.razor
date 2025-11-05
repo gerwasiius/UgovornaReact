@@ -1,0 +1,20 @@
+﻿@if (!string.IsNullOrEmpty(Label))
+{
+    <label class="form-label">@Label</label>
+}
+@if (IsTextArea)
+{
+    <textarea class="form-control @InputClass"
+              style="@InputStyle"
+              rows="@Rows"
+              disabled
+              readonly>@Value</textarea>
+}
+else
+{
+    <input class="form-control @InputClass"
+           style="@InputStyle"
+           value="@Value"
+           disabled
+           readonly />
+}

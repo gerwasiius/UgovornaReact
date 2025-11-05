@@ -1,0 +1,91 @@
+﻿@rendermode InteractiveServer
+@page "/groups"
+@using AutoDoc.Shared.Model.DTO.Enumerations
+@using AutoDocFront.Components.Shared
+@using AutoDocFront.Components.Modals
+@using AutoDocFront.Models.Enumerations
+
+<!--
+    Grupe članova (Section Groups) management page.
+    Provides filtering, pagination, and CRUD modal for groups.
+-->
+@if (_isLoading)
+{
+    <div class="spinner mt-5"></div>
+}
+else
+{
+    <div class="container pb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+                <h1 class="h2 fw-bold text-dark">Grupe članova</h1>
+                <p class="text-secondary">Upravljanje grupama sekcija i članova dokumenta</p>
+            </div>
+            <button class="btn corporate-button-primary" @onclick="@(g => OpenGroupModal(ModalMode.INSERT))" disabled="@_isLoading">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Nova Grupa
+            </button>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <FilterBar TStatusEnum="GroupStatusType"
+                       SearchTerm="@_searchTerm"
+                       SearchTermChanged="v => _searchTerm = v"
+                       Placeholder="Pretraga po nazivu grupe"
+                       StatusFilter="@_statusFilter"
+                       StatusValues="_statusValues"
+                       AllLabel="Sve grupe"
+                       ShowStatus="true"
+                       StatusFilterChanged="OnGroupStatusFilterChangedAsync"
+                       OnSearch="SearchGroupsAsync"
+                       OnClear="ClearGroupFiltersAsync" />
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center text-secondary small mb-2">
+            <span>
+                Prikazano @(StartIndex + 1)-@EndIndex od @_totalCount grupa
+            </span>
+            @if (TotalPages > 1)
+            {
+                <span>Stranica @_currentPage od @TotalPages</span>
+            }
+        </div>
+
+        <div class="row g-4">
+            @foreach (var group in _groups)
+            {
+                <GroupCard Group="group"
+                           Mode="admin"
+                           OnView="@(g => OpenGroupModal(ModalMode.VIEW, g))"
+                           OnEdit="@(g => OpenGroupModal(ModalMode.EDIT, g))"
+                           OnViewMembers="NavigateToGroupSections" />
+            }
+        </div>
+
+        @if (TotalPages > 1)
+        {
+            <Pagination CurrentPage="@_currentPage"
+                        TotalPages="@TotalPages"
+                        OnPageChanged="ChangePageAsync" />
+        }
+
+        @if (!_groups.Any())
+        {
+            <div class="text-center py-5" aria-live="polite">
+                <div class="mx-auto mb-4 d-flex align-items-center justify-content-center rounded-circle bg-light" style="width: 96px; height: 96px;">
+                    <i class="fa fa-search position text-secondary" style="font-size: 2rem;"></i>
+                </div>
+                <h3 class="h5 fw-medium text-dark mb-2">Nema rezultata</h3>
+                <p class="text-secondary">Pokušajte sa drugim terminom pretrage ili kreirajte novu grupu.</p>
+            </div>
+        }
+    </div>
+}
+@if (_isGroupModalVisible)
+{
+    <GroupModal IsOpen="_isGroupModalVisible"
+                IsOpenChanged="@(v => _isGroupModalVisible = v)"
+                Group="_selectedGroup"
+                Mode="_groupModalMode"
+                OnSave="OnGroupModalSavedAsync" />
+}
